@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Habit Details</title>
+    <link rel="stylesheet" href="styles_home.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #282c34; /* Dark background for contrast */
+        }
+        h1, h2 {
+            color: #ffffff;
+        }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            text-align: left;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4f7fb5; /* Header background color */
+            color: white;
+        }
+        h3 {
+            background-color: #4CAF50; /* Tracking header color */
+            color: white;
+            padding: 3px 10px;
+            margin: 0;
+            width: fit-content;
+        }
+        .start-date-label, .start-date {
+            background-color: #4CAF50; /* Start date label color */
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .no-entries {
+            color: #ffffff; /* Message color for no entries */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Habit Tracking Details</h1>
+    <div id="habitDetails"></div>
+    <button onclick="goBack()">Go Back</button>
+
+    <script>
+        const habits = JSON.parse(localStorage.getItem('habits')) || {};
+
+        function displayHabitDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const habitName = decodeURIComponent(urlParams.get('habit'));
+            const habit = habits[habitName];
+
+            if (habit) {
+                const habitDetails = document.getElementById('habitDetails');
+                const entriesHTML = habit.entries.length > 0 
+                    ? habit.entries.map((entry, index) => `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${entry}</td>
+                        </tr>
+                    `).join('') 
+                    : '<tr><td colspan="2" class="no-entries">No entries logged for this habit.</td></tr>';
+
+                habitDetails.innerHTML = `
+                    <h2>${habitName}</h2>
+                    <p><span class="start-date-label">Start Date:</span> <span class="start-date">${habit.startDate}</span></p>
+                    <h3>Tracking Entries:</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Entry Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${entriesHTML}
+                        </tbody>
+                    </table>
+                `;
+            } else {
+                document.getElementById('habitDetails').innerHTML = '<p>No details found for this habit.</p>';
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Display habit details on page load
+        displayHabitDetails();
+    </script>
+</body>
+</html>

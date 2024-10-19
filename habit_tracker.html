@@ -3,6 +3,45 @@
 <head>
     <title>Habit Tracker</title>
     <link rel="stylesheet" href="styles_home.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #ffffff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50; /* Header background color */
+            color: white;
+        }
+        button {
+            background-color: #4CAF50; /* Button background color */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+        ul {
+            list-style-type: none; /* Remove bullet points */
+            padding: 0; /* Remove padding */
+            margin: 0; /* Remove margin */
+        }
+    </style>
 </head>
 <body>
     <h1>Habit Tracker</h1>
@@ -69,6 +108,7 @@
                     <td>${startDate}</td>
                     <td>
                         <button onclick="trackHabit('${habit}')">Track</button>
+                        <button onclick="viewDetails('${habit}')">Details</button>
                         <button onclick="deleteHabit('${habit}')">Delete</button>
                     </td>
                     <td>
@@ -79,6 +119,12 @@
             }
         }
 
+        function viewDetails(habit) {
+            // Redirect to the details page
+            window.location.href = `habit_details.html?habit=${encodeURIComponent(habit)}`;
+        }
+
+        // Initial display of habits
         displayHabits();
     </script>
 </body>
