@@ -11,7 +11,6 @@
         <option value="daily">Daily</option>
         <option value="weekly">Weekly</option>
         <option value="monthly">Monthly</option>
-        <option value="random">Random</option>
     </select>
     <button onclick="addHabit()">Add Habit</button> <!-- Button to add a new habit -->
     <h2>Your Habits</h2>
@@ -34,83 +33,89 @@
 
         // Function to add a new habit
         function addHabit() {
-            const habitInput = document.getElementById('habitInput'); // Get habit input element
-            const frequencyInput = document.getElementById('frequencyInput'); // Get frequency dropdown
-            const habitName = habitInput.value.trim(); // Trim whitespace from habit name
-            const frequency = frequencyInput.value; // Get selected frequency
+            const habitInput = document.getElementById('habitInput'); 
+            const frequencyInput = document.getElementById('frequencyInput'); 
+            const habitName = habitInput.value.trim(); 
+            const frequency = frequencyInput.value; 
 
             // Check if the habit name is valid and doesn't already exist
             if (habitName && !habits[habitName]) {
-                const startDate = new Date().toLocaleString(); // Get the current date and time
+                const startDate = new Date().toLocaleString(); 
                 // Create a new habit object
                 habits[habitName] = { 
                     startDate: startDate, 
                     frequency: frequency, 
                     entries: [], 
                     tracked: false, 
-                    remainingDays: 21 
+                    remainingDays: 21,
+                    lastTrackedDate: null // Initialize lastTrackedDate
                 };
-                habitInput.value = ''; // Clear input field
-                frequencyInput.value = 'daily'; // Reset frequency to default
-                saveHabits(); // Save habits to local storage
-                displayHabits(); // Update the displayed habits
+                habitInput.value = ''; 
+                frequencyInput.value = 'daily'; 
+                saveHabits(); 
+                displayHabits(); 
             } else {
-                alert('Habit already exists or is empty.'); // Alert for invalid input
+                alert('Habit already exists or is empty.'); 
             }
         }
 
         // Function to track a habit
         function trackHabit(habit) {
-            const now = new Date(); // Get the current date
-            const dateTime = now.toLocaleString(); // Format the date and time
-            habits[habit].entries.push(dateTime); // Add the entry to the habit's entries
-            habits[habit].tracked = true; // Mark the habit as tracked
+            const now = new Date();
+            const currentDate = now.toLocaleDateString(); // Get current date in MM/DD/YYYY format
 
-            // Reduce the remaining days if applicable
-            if (habits[habit].remainingDays > 0) {
-                habits[habit].remainingDays -= 1; // Decrement remaining days
+            // Check if today is different from the last tracked date
+            if (habits[habit].lastTrackedDate !== currentDate) {
+                const dateTime = now.toLocaleString(); 
+                habits[habit].entries.push(dateTime); 
+                habits[habit].tracked = true; 
+                habits[habit].lastTrackedDate = currentDate; // Update the last tracked date
+
+                // Reduce the remaining days if applicable
+                if (habits[habit].remainingDays > 0) {
+                    habits[habit].remainingDays -= 1; 
+                }
+
+                saveHabits(); 
+                displayHabits(); 
+            } else {
+                alert('You have already tracked this habit today.'); 
             }
-
-            saveHabits(); // Save updated habits to local storage
-            displayHabits(); // Update the displayed habits
         }
 
         // Function to edit an existing habit
         function editHabit(oldHabitName) {
-            const newHabitName = prompt("Edit habit name:", oldHabitName); // Prompt for new name
-            // Check if the new name is valid
+            const newHabitName = prompt("Edit habit name:", oldHabitName); 
             if (newHabitName && !habits[newHabitName]) {
-                habits[newHabitName] = habits[oldHabitName]; // Copy old habit to new name
-                delete habits[oldHabitName]; // Delete the old habit
-                saveHabits(); // Save changes
-                displayHabits(); // Update the displayed habits
+                habits[newHabitName] = habits[oldHabitName]; 
+                delete habits[oldHabitName]; 
+                saveHabits(); 
+                displayHabits(); 
             } else {
-                alert('Habit name is either empty or already exists.'); // Alert for invalid input
+                alert('Habit name is either empty or already exists.'); 
             }
         }
 
         // Function to delete a habit
         function deleteHabit(habit) {
-            delete habits[habit]; // Remove the habit from the object
-            saveHabits(); // Save changes
-            displayHabits(); // Update the displayed habits
+            delete habits[habit]; 
+            saveHabits(); 
+            displayHabits(); 
         }
 
         // Function to save habits to local storage
         function saveHabits() {
-            localStorage.setItem('habits', JSON.stringify(habits)); // Convert habits object to string and save
+            localStorage.setItem('habits', JSON.stringify(habits)); 
         }
 
         // Function to display the list of habits
         function displayHabits() {
-            const habitList = document.getElementById('habitList'); // Get the habit list element
-            habitList.innerHTML = ''; // Clear the current list
-            // Loop through each habit in the habits object
+            const habitList = document.getElementById('habitList'); 
+            habitList.innerHTML = ''; 
             for (const habit in habits) {
-                const { startDate, frequency, entries, tracked, remainingDays } = habits[habit]; // Destructure habit properties
-                const latestEntries = entries.slice(-2); // Get the last two entries
+                const { startDate, frequency, entries, tracked, remainingDays, lastTrackedDate } = habits[habit]; 
+                const latestEntries = entries.slice(-2); 
 
-                // Create a new table row for each habit
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${habit}</td>
@@ -124,14 +129,14 @@
                         </a>
                     </td>
                     <td>
-                        <button onclick="trackHabit('${habit}')" ${tracked ? 'disabled' : ''}>
-                            ${tracked ? 'Tracked' : 'Track'}
+                        <button onclick="trackHabit('${habit}')">
+                            ${lastTrackedDate === new Date().toLocaleDateString() ? 'Tracked' : 'Track'}
                         </button>
                         <div>Remaining Days in 21 Days Challenge: ${remainingDays}</div>
                         <ul>${latestEntries.map(date => `<li>${date}</li>`).join('')}</ul>
                     </td>
                 `;
-                habitList.appendChild(tr); // Append the row to the habit list
+                habitList.appendChild(tr); 
             }
         }
 
