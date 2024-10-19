@@ -3,49 +3,16 @@
 <head>
     <title>Habit Tracker</title>
     <link rel="stylesheet" href="styles_home.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #ffffff;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #4CAF50; /* Header background color */
-            color: white;
-        }
-        button {
-            background-color: #4CAF50; /* Button background color */
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background-color: #45a049; /* Darker green on hover */
-        }
-        ul {
-            list-style-type: none; /* Remove bullet points */
-            padding: 0; /* Remove padding */
-            margin: 0; /* Remove margin */
-        }
-    </style>
 </head>
 <body>
     <h1>Habit Tracker</h1>
     <input type="text" id="habitInput" placeholder="Enter a new habit">
+    <select id="frequencyInput">
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+        <option value="random">Random</option>
+    </select>
     <button onclick="addHabit()">Add Habit</button>
     <h2>Your Habits</h2>
     <table id="habitTable">
@@ -53,6 +20,7 @@
             <tr>
                 <th>Habit</th>
                 <th>Start Date</th>
+                <th>Frequency</th>
                 <th>Actions</th>
                 <th>Tracking</th>
             </tr>
@@ -65,11 +33,15 @@
 
         function addHabit() {
             const habitInput = document.getElementById('habitInput');
+            const frequencyInput = document.getElementById('frequencyInput');
             const habitName = habitInput.value.trim();
+            const frequency = frequencyInput.value;
+
             if (habitName && !habits[habitName]) {
                 const startDate = new Date().toLocaleString();
-                habits[habitName] = { startDate: startDate, entries: [] };
+                habits[habitName] = { startDate: startDate, frequency: frequency, entries: [], tracked: false, remainingDays: 21 };
                 habitInput.value = '';
+                frequencyInput.value = 'daily'; // Reset to default
                 saveHabits();
                 displayHabits();
             } else {
@@ -81,8 +53,27 @@
             const now = new Date();
             const dateTime = now.toLocaleString();
             habits[habit].entries.push(dateTime);
+            habits[habit].tracked = true; // Set tracked status to true
+
+            // Reduce the remaining days
+            if (habits[habit].remainingDays > 0) {
+                habits[habit].remainingDays -= 1; // Decrement remaining days
+            }
+
             saveHabits();
             displayHabits();
+        }
+
+        function editHabit(oldHabitName) {
+            const newHabitName = prompt("Edit habit name:", oldHabitName);
+            if (newHabitName && !habits[newHabitName]) {
+                habits[newHabitName] = habits[oldHabitName];
+                delete habits[oldHabitName];
+                saveHabits();
+                displayHabits();
+            } else {
+                alert('Habit name is either empty or already exists.');
+            }
         }
 
         function deleteHabit(habit) {
@@ -99,29 +90,31 @@
             const habitList = document.getElementById('habitList');
             habitList.innerHTML = '';
             for (const habit in habits) {
-                const { startDate, entries } = habits[habit];
+                const { startDate, frequency, entries, tracked, remainingDays } = habits[habit];
                 const latestEntries = entries.slice(-2);
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${habit}</td>
                     <td>${startDate}</td>
+                    <td>${frequency}</td>
                     <td>
-                        <button onclick="trackHabit('${habit}')">Track</button>
-                        <button onclick="viewDetails('${habit}')">Details</button>
+                        <button onclick="editHabit('${habit}')">Edit</button>
                         <button onclick="deleteHabit('${habit}')">Delete</button>
+                        <a href="habit_details.html?habit=${encodeURIComponent(habit)}" class="details-button">
+                            <button>Details</button>
+                        </a>
                     </td>
                     <td>
+                        <button onclick="trackHabit('${habit}')" ${tracked ? 'disabled' : ''}>
+                            ${tracked ? 'Tracked' : 'Track'}
+                        </button>
+                        <div>Remaining Days in 21 Days Challenge: ${remainingDays}</div>
                         <ul>${latestEntries.map(date => `<li>${date}</li>`).join('')}</ul>
                     </td>
                 `;
                 habitList.appendChild(tr);
             }
-        }
-
-        function viewDetails(habit) {
-            // Redirect to the details page
-            window.location.href = `habit_details.html?habit=${encodeURIComponent(habit)}`;
         }
 
         // Initial display of habits
