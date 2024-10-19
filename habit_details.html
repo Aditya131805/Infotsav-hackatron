@@ -4,7 +4,7 @@
     <title>Habit Details</title>
     <link rel="stylesheet" href="styles_home.css">
     <style>
-        body {
+        body {  
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #282c34; /* Dark background for contrast */
@@ -12,8 +12,12 @@
         h1, h2 {
             color: #ffffff;
         }
+        .container {
+            display: flex;
+            justify-content: space-between; /* Aligns the table and countdown */
+        }
         table {
-            width: 50%;
+            width: 60%; /* Adjusted width for the table */
             border-collapse: collapse;
             margin-top: 20px;
             text-align: left;
@@ -44,9 +48,14 @@
             margin-top: 20px;
         }
         .countdown {
-            color: #FFD700; /* Gold color for countdown */
-            font-size: 20px;
+            background-color: #4f7fb5; /* White background for countdown */
+            color: #ccb839; /* Gold color for countdown text */
+            font-size: 20px; /* Increased font size */
             margin-top: 20px;
+            padding: 20px; /* Added padding */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+            align-self: flex-start; /* Align countdown to the top */
         }
     </style>
 </head>
@@ -82,25 +91,27 @@
 
                 const remainingDays = Math.max(21 - daysSinceStart - habit.entries.length, 0); // Adjust calculation
                 const countdownMessage = remainingDays > 0 
-                    ? `Days remaining for 21-day challenge: ${remainingDays}`
-                    : 'Congratulations! You have completed the 21-day challenge!';
+                    ? `${remainingDays}` // Just the number of remaining days
+                    : 'Completed!';
 
                 habitDetails.innerHTML = `
                     <h2>${habitName}</h2>
                     <p><span class="start-date-label">Start Date:</span> <span class="start-date">${habit.startDate}</span></p>
                     <h3>Tracking Entries:</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Entry Date & Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${entriesHTML}
-                        </tbody>
-                    </table>
-                    <div class="countdown">${countdownMessage}</div>
+                    <div class="container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Entry Date & Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${entriesHTML}
+                            </tbody>
+                        </table>
+                        <div class="countdown">Days remaining in 21 Days Challenge: <h1 style="color:#ccb839"><center>${countdownMessage}</center></h1></div>
+                    </div>
                 `;
             } else {
                 document.getElementById('habitDetails').innerHTML = '<p>No details found for this habit.</p>';
