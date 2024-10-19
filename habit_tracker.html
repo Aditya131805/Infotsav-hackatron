@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Habit Tracker</title>
+    <link rel="stylesheet" href="styles_home.css">
+</head>
+<body>
+    <h1>Habit Tracker</h1>
+    <input type="text" id="habitInput" placeholder="Enter a new habit">
+    <button onclick="addHabit()">Add Habit</button>
+    <h2>Your Habits</h2>
+    <table id="habitTable">
+        <thead>
+            <tr>
+                <th>Habit</th>
+                <th>Start Date</th>
+                <th>Actions</th>
+                <th>Tracking</th>
+            </tr>
+        </thead>
+        <tbody id="habitList"></tbody>
+    </table>
+
+    <script>
+        const habits = JSON.parse(localStorage.getItem('habits')) || {};
+
+        function addHabit() {
+            const habitInput = document.getElementById('habitInput');
+            const habitName = habitInput.value.trim();
+            if (habitName && !habits[habitName]) {
+                const startDate = new Date().toLocaleString();
+                habits[habitName] = { startDate: startDate, entries: [] };
+                habitInput.value = '';
+                saveHabits();
+                displayHabits();
+            } else {
+                alert('Habit already exists or is empty.');
+            }
+        }
+
+        function trackHabit(habit) {
+            const now = new Date();
+            const dateTime = now.toLocaleString();
+            habits[habit].entries.push(dateTime);
+            saveHabits();
+            displayHabits();
+        }
+
+        function deleteHabit(habit) {
+            delete habits[habit];
+            saveHabits();
+            displayHabits();
+        }
+
+        function saveHabits() {
+            localStorage.setItem('habits', JSON.stringify(habits));
+        }
+
+        function displayHabits() {
+            const habitList = document.getElementById('habitList');
+            habitList.innerHTML = '';
+            for (const habit in habits) {
+                const { startDate, entries } = habits[habit];
+                const latestEntries = entries.slice(-2);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${habit}</td>
+                    <td>${startDate}</td>
+                    <td>
+                        <button onclick="trackHabit('${habit}')">Track</button>
+                        <button onclick="deleteHabit('${habit}')">Delete</button>
+                    </td>
+                    <td>
+                        <ul>${latestEntries.map(date => `<li>${date}</li>`).join('')}</ul>
+                    </td>
+                `;
+                habitList.appendChild(tr);
+            }
+        }
+
+        displayHabits();
+    </script>
+</body>
+</html>
