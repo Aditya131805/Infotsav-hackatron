@@ -4,24 +4,29 @@
     <title>Habit Details</title>
     <link rel="stylesheet" href="styles_home.css">
     <style>
+        /* Basic styling for the body */
         body {  
             font-family: Arial, sans-serif;
             margin: 20px;
             background-color: #282c34; /* Dark background for contrast */
         }
+        /* Styling for headings */
         h1, h2 {
             color: #ffffff;
         }
+        /* Flex container for the table and countdown */
         .container {
             display: flex;
             justify-content: space-between; /* Aligns the table and countdown */
         }
+        /* Styling for the habit entries table */
         table {
             width: 60%; /* Adjusted width for the table */
             border-collapse: collapse;
             margin-top: 20px;
             text-align: left;
         }
+        /* Styling for table cells */
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
@@ -30,6 +35,7 @@
             background-color: #4f7fb5; /* Header background color */
             color: white;
         }
+        /* Styling for the tracking entries header */
         h3 {
             background-color: #4CAF50; /* Tracking header color */
             color: white;
@@ -37,20 +43,23 @@
             margin: 0;
             width: fit-content;
         }
+        /* Styling for start date label and value */
         .start-date-label, .start-date {
             background-color: #4CAF50; /* Start date label color */
             color: white;
             padding: 5px;
             border-radius: 5px;
         }
+        /* Styling for no entries message */
         .no-entries {
             color: #ffffff; /* Message color for no entries */
             margin-top: 20px;
         }
+        /* Styling for countdown section */
         .countdown {
-            background-color: #4f7fb5; /* White background for countdown */
+            background-color: #4f7fb5; /* Countdown background color */
             color: #ccb839; /* Gold color for countdown text */
-            font-size: 20px; /* Increased font size */
+            font-size: 20px; /* Base font size */
             margin-top: 20px;
             padding: 20px; /* Added padding */
             border-radius: 10px; /* Rounded corners */
@@ -61,19 +70,23 @@
 </head>
 <body>
     <h1>Habit Tracking Details</h1>
-    <div id="habitDetails"></div>
-    <button onclick="goBack()">Go Back</button>
+    <div id="habitDetails"></div> <!-- Container for habit details -->
+    <button onclick="goBack()">Go Back</button> <!-- Button to go back to the previous page -->
 
     <script>
+        // Retrieve habits from local storage or initialize an empty object
         const habits = JSON.parse(localStorage.getItem('habits')) || {};
 
+        // Function to display habit details
         function displayHabitDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const habitName = decodeURIComponent(urlParams.get('habit'));
-            const habit = habits[habitName];
+            const urlParams = new URLSearchParams(window.location.search); // Get URL parameters
+            const habitName = decodeURIComponent(urlParams.get('habit')); // Get the habit name
+            const habit = habits[habitName]; // Retrieve the specific habit object
 
             if (habit) {
                 const habitDetails = document.getElementById('habitDetails');
+                
+                // Create HTML for habit entries, or show a message if none exist
                 const entriesHTML = habit.entries.length > 0 
                     ? habit.entries.map((entry, index) => `
                         <tr>
@@ -83,17 +96,19 @@
                     `).join('') 
                     : '<tr><td colspan="2" class="no-entries">No entries logged for this habit.</td></tr>';
 
-                // Calculate days since start date
+                // Calculate days since the habit's start date
                 const startDate = new Date(habit.startDate);
                 const currentDate = new Date();
-                const timeDiff = currentDate - startDate;
+                const timeDiff = currentDate - startDate; // Time difference in milliseconds
                 const daysSinceStart = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
 
-                const remainingDays = Math.max(21 - daysSinceStart - habit.entries.length, 0); // Adjust calculation
+                // Calculate remaining days in the 21-day challenge
+                const remainingDays = Math.max(21 - daysSinceStart - habit.entries.length, 0); 
                 const countdownMessage = remainingDays > 0 
-                    ? `${remainingDays}` // Just the number of remaining days
-                    : 'Completed!';
+                    ? `${remainingDays}` // Show remaining days
+                    : 'Completed!'; // Message if challenge is completed
 
+                // Render the habit details and countdown message
                 habitDetails.innerHTML = `
                     <h2>${habitName}</h2>
                     <p><span class="start-date-label">Start Date:</span> <span class="start-date">${habit.startDate}</span></p>
@@ -114,10 +129,12 @@
                     </div>
                 `;
             } else {
+                // Display a message if no details are found for the habit
                 document.getElementById('habitDetails').innerHTML = '<p>No details found for this habit.</p>';
             }
         }
 
+        // Function to go back to the previous page
         function goBack() {
             window.history.back();
         }

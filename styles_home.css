@@ -1,109 +1,109 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    padding: 20px;
-    background-image: url('background-image.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    color: #333; 
+    font-family: Arial, sans-serif; /* Set the font for the entire page */
+    margin: 20px; /* Add margin around the body */
+    padding: 20px; /* Add padding inside the body */
+    background-image: url('background-image.jpg'); /* Set a background image */
+    background-size: cover; /* Cover the entire area with the background image */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-position: center; /* Center the background image */
+    color: #333; /* Set the default text color */
 }
 
 h1 {
-    text-align: center;
-    color: #ffffff; 
-    margin-bottom: 20px;
+    text-align: center; /* Center the heading */
+    color: #ffffff; /* Set the color of the heading */
+    margin-bottom: 20px; /* Add space below the heading */
 }
 
 input[type="text"] {
-    width: 250px;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: border-color 0.3s;
+    width: 250px; /* Set width for text input */
+    padding: 10px; /* Add padding inside the input */
+    margin: 5px 0; /* Add vertical margin */
+    border: 1px solid #ddd; /* Set border style */
+    border-radius: 5px; /* Round the corners of the input */
+    transition: border-color 0.3s; /* Smooth transition for border color on focus */
 }
 
 input[type="text"]:focus {
-    border-color: #4CAF50; 
+    border-color: #4CAF50; /* Change border color when input is focused */
 }
 
 button {
-    padding: 10px 15px;
-    margin: 5px;
-    cursor: pointer;
-    background-color: #4CAF50; 
-    color: white; 
-    border: none; 
-    border-radius: 5px; 
-    transition: background-color 0.3s;
+    padding: 10px 15px; /* Add padding inside buttons */
+    margin: 5px; /* Add margin around buttons */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    background-color: #4CAF50; /* Set background color for buttons */
+    color: white; /* Set text color for buttons */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Round the corners of buttons */
+    transition: background-color 0.3s; /* Smooth transition for background color on hover */
 }
 
 button:hover {
-    background-color: #45a049; 
+    background-color: #45a049; /* Change background color when hovered */
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    width: 100%; /* Set table width to 100% */
+    border-collapse: collapse; /* Merge table borders */
+    margin-top: 20px; /* Add space above the table */
 }
 
 th, td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
-    background-color: rgba(255, 255, 255, 0.8); 
+    padding: 12px; /* Add padding inside table cells */
+    border: 1px solid #ddd; /* Set border style for table cells */
+    text-align: left; /* Align text to the left */
+    background-color: rgba(255, 255, 255, 0.8); /* Set a semi-transparent background for table cells */
 }
 
 th {
-    background-color: #4f7fb5; 
-    color: white; 
+    background-color: #4f7fb5; /* Set background color for table headers */
+    color: white; /* Set text color for table headers */
 }
 
 tr:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.5); /* Change background color of rows on hover */
 }
 
 ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+    list-style-type: none; /* Remove bullet points from lists */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
 }
 
 li {
-    background: rgba(255, 255, 255, 0.9); 
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    background: rgba(255, 255, 255, 0.9); /* Set a semi-transparent background for list items */
+    margin: 5px 0; /* Add vertical margin between list items */
+    padding: 10px; /* Add padding inside list items */
+    border-radius: 5px; /* Round the corners of list items */
+    transition: background-color 0.3s; /* Smooth transition for background color on hover */
 }
 
 li:hover {
-    background: rgba(255, 255, 255, 1); 
+    background: rgba(255, 255, 255, 1); /* Change background color of list items on hover */
 }
 
 td ul {
-    padding: 0; 
-    margin: 0; 
+    padding: 0; /* Remove padding for nested lists inside table cells */
+    margin: 0; /* Remove margin for nested lists */
 }
 
 td ul li {
-    background: rgba(255, 255, 255, 0.9); 
-    margin: 3px 0; 
+    background: rgba(255, 255, 255, 0.9); /* Set a semi-transparent background for nested list items */
+    margin: 3px 0; /* Add vertical margin between nested list items */
 }
 
 td ul li:hover {
-    background: rgba(255, 255, 255, 1); 
+    background: rgba(255, 255, 255, 1); /* Change background color of nested list items on hover */
 }
 
 #habitTable {
-    margin-top: 20px;
+    margin-top: 20px; /* Add space above the habit table */
 }
- 
+
 div {
-    margin: 10px 0;
-    font-weight: bold;
-    color: green;
-    text-align: center;
+    margin: 10px 0; /* Add vertical margin around divs */
+    font-weight: bold; /* Make text bold */
+    color: green; /* Set text color to green */
+    text-align: center; /* Center-align the text */
 }
